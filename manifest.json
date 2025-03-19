@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "AdFriend",
+  "name": "AdMe",
   "version": "1.0",
   "description": "Replaces ads with positive content widgets",
   "permissions": ["storage"],

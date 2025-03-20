@@ -1,88 +1,152 @@
-/* AdFriend Popup Styles */
+/* Popup Container */
 .popup-container {
   font-family: Arial, sans-serif;
-  width: 260px;
-  padding: 15px;
-  background: #f4f4f5; /* Light gray background */
-  color: #333;
-  text-align: center;
-  border-radius: 8px;
+  width: 300px;
+  height: 480px;
+  border: 2px solid #000;
+  overflow: hidden;
+  background: #ffffff;
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+
+/* Header */
+.header {
+  background: #fff;
+  padding: 15px 10px;
+  text-align: center;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  position: relative;
+  border-bottom: 1px solid #000;
+}
+
+.header::after {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+}
+
+.header-title {
+  font-weight: bold;
+  font-size: 22px;
+  margin-bottom: 4px;
+  color: #000;
+}
+
+.header-label {
+  font-style: italic;
+  font-size: 18px;
+  margin-bottom: 6px;
+  color: #000;
+}
+
+.instruction {
+  font-size: 12px;
+  font-style: italic;
+  color: #000;
+  opacity: 0.8;
+}
+
+/* Carousel Section */
+.carousel {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Slides */
+.slides {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.5s ease;
+}
+
+.slide {
+  min-width: 100%;
+  height: 100%;
+  display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  background-size: contain; /* Ensure images fit fully within the slide */
+  background-position: center;
+  background-repeat: no-repeat;
+  max-width: 100%; /* Prevent overflow beyond container */
+  max-height: 100%; /* Ensure it fits within the carousel height */
 }
 
-.popup-container h3 {
-  margin-bottom: 10px;
-  font-size: 16px;
-  font-weight: bold;
-  color: #007BFF; /* Blue color */
-}
-
-.popup-container select {
-  width: 100%;
-  padding: 8px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background: white;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.popup-container select:hover {
-  border-color: #007BFF;
-}
-
-.popup-container input[type="text"] {
-  width: calc(100% - 10px);
-  padding: 8px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  display: none;
-  margin-top: 8px;
-}
-
-.popup-container button {
-  width: 100%;
-  background: #007BFF;
-  color: white;
+/* Arrow Buttons */
+.prev, .next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  color: #000;
   border: none;
-  padding: 10px;
-  margin-top: 12px;
-  border-radius: 5px;
-  font-size: 14px;
+  padding: 0;
   cursor: pointer;
-  transition: background 0.3s ease-in-out;
+  font-size: 30px;
+  z-index: 200;
 }
 
-.popup-container button:hover {
-  background: #0056b3;
+.prev {
+  left: 10px;
 }
 
+.next {
+  right: 10px;
+}
 
+/* Custom Message Input */
+#customMessage {
+  width: 80%;
+  padding: 8px;
+  font-size: 14px;
+  border: 2px solid #000;
+  background: #fff;
+  position: absolute;
+  bottom: 40px;
+  display: none;
+  z-index: 10;
+}
 
-/*Fun facts section */
+/* Tooltip */
+.tooltip {
+  position: absolute;
+  background: #fff;
+  color: #000;
+  padding: 6px 12px;
+  border: 1px solid #000;
+  font-size: 14px;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 300;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.popup-container:hover .tooltip {
+  opacity: 0.95;
+}
+
+/* Fun Facts Section */
 .funfact-container {
   font-family: 'Arial', sans-serif;
   max-width: 320px;
   padding: 20px;
-  border-radius: 10px;
   background: #fff;
-  color: #333;
+  color: #000;
   text-align: center;
-  border: 3px solid #FF8C00; /* Orange border for the frame */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  animation: fadeIn 0.8s ease-in-out;
+  border: 2px solid #000;
 }
 
 .funfact-header {
   font-size: 20px;
   font-weight: bold;
-  
-  color: #FF8C00;
+  color: #000;
   margin-bottom: 12px;
 }
 
@@ -91,45 +155,37 @@
   font-style: italic;
   line-height: 1.5;
   padding: 10px;
-  border-radius: 5px;
-  background: #FFF3E0; /* Light orange background */
+  background: #fff;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-/*riddles section*/
+/* Riddles Section */
 .riddle-box {
   font-family: 'Arial', sans-serif;
-  background: #e0f7fa; /* Light blue */
+  background: #fff;
   padding: 20px;
-  border: 2px solid #0288d1; /* Deep blue */
-  border-radius: 10px;
+  border: 2px solid #000;
   text-align: center;
   max-width: 280px;
   margin: auto;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .riddle-header {
   font-size: 18px;
   font-weight: bold;
-  
-  color: #01579b;
+  color: #000;
   margin-bottom: 10px;
 }
 
 .riddle-question {
   font-size: 16px;
   font-weight: bold;
-  color: #0277bd;
+  color: #000;
   margin-bottom: 10px;
 }
 
 .riddle-answer {
   font-size: 14px;
-  color: #6b7280;
+  color: #000;
   font-style: italic;
   margin-top: 10px;
   cursor: pointer;
@@ -138,35 +194,28 @@
 .riddle-answer span {
   display: none;
   font-weight: bold;
-  color: #1f2937;
+  color: #000;
 }
 
 .riddle-answer:hover span {
   display: inline;
 }
 
-/*Joke section */
+/* Joke Section */
 .joke-container {
-  background: #fff7d6;
-  border: 3px solid #ffcc00;
-  border-radius: 12px;
+  background: #fff;
+  border: 2px solid #000;
   padding: 15px;
   text-align: center;
   font-family: "Poppins", sans-serif;
-  color: #222;
+  color: #000;
   max-width: 300px;
-  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.15);
-  transition: transform 0.3s ease-in-out;
-}
-
-.joke-container:hover {
-  transform: scale(1.05);
 }
 
 .joke-header {
   font-size: 18px;
   font-weight: bold;
-  color: #ff5722;
+  color: #000;
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 8px;
@@ -175,53 +224,33 @@
 .joke-setup {
   font-size: 17px;
   font-weight: 600;
-  color: #444;
+  color: #000;
   text-transform: uppercase;
 }
 
 .joke-punchline {
   font-size: 16px;
   font-weight: bold;
-  color: #2e7d32;
+  color: #000;
   text-transform: lowercase;
   margin-top: 8px;
 }
 
-.joke-container:hover .joke-punchline {
-  color: #d84315;
-}
-/* Custom message section*/
+/* Custom Message Section */
 .custom-message-box {
-  background: linear-gradient(135deg, #1e3a5f, #3b82f6); /* Deep blue gradient */
-  border: none;
-  border-radius: 12px;
+  background: #fff;
+  border: 2px solid #000;
   padding: 18px;
   text-align: center;
   font-family: "Poppins", sans-serif;
-  color: #ffffff;
+  color: #000;
   max-width: 360px;
-  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15); /* Soft shadow */
-  transition: transform 0.3s ease-in-out;
-  position: relative;
-  overflow: hidden;
-}
-
-.custom-message-box::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 150%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.05);
-  transform: translateX(-50%) rotate(-10deg);
-  pointer-events: none;
 }
 
 .custom-message-title {
   font-size: 20px;
   font-weight: bold;
-  color: #f8fafc;
+  color: #000;
   text-transform: uppercase;
   margin-bottom: 12px;
   letter-spacing: 1px;
@@ -230,24 +259,17 @@
 .custom-message-content {
   font-size: 16px;
   font-weight: 400;
-  color: #e0eafc;
+  color: #000;
   line-height: 1.6;
-  font-style: italic; /* Added italic style */
+  font-style: italic;
 }
 
-.custom-message-box:hover {
-  transform: scale(1.03);
-}
-
-
-/*solid section*/
+/* Solid Placeholder */
 .solid-placeholder {
   min-width: 200px;
   min-height: 100px;
-  background: linear-gradient(135deg, #a0aec0, #718096);
-  border-radius: 12px;
-  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.15);
-  transition: all 0.3s ease-in-out;
+  background: #fff;
+  border: 2px solid #000;
   position: relative;
 }
 
@@ -255,35 +277,34 @@
   content: "🚫 Ad Blocked";
   font-size: 14px;
   font-weight: bold;
-  color: #fff;
+  color: #000;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
-  opacity: 0.8;
 }
 
-
+/* Additional Styles */
 .riddle-box,
 .joke-container {
-  max-height: 300px; /* Adjust this value as needed */
+  max-height: 300px;
   overflow: auto;
 }
-.popup-container {
-  max-height: 400px; /* Adjust as needed */
-  overflow: auto;
-}
-/*Ensure Center Alignment*/
+
 .funfact-container,
 .joke-container,
 .custom-message-box {
-  margin: 0 auto; /* Centers the box horizontally */
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  max-width: 90%; /* Prevents the box from getting too wide */
+  max-width: 90%;
   width: 100%;
+}
+
+.moti {
+  width: 100%;
+  height: 100%;
 }

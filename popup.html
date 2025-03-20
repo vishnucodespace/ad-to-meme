@@ -1,24 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>AdMe Settings</title>
   <link rel="stylesheet" href="styles.css">
 </head>
-<body class="popup-container"></body>
-  <h3>Replace Ads With:</h3>
-  <select id="replacementType">
-    <option value="quotes">Motivational Quotes</option>
-    <option value="facts">Fun Facts</option>
-    <option value="riddles">Riddles</option>
-    <option value="jokes">Jokes</option>
-    <option value="empty">Empty Space</option>
-    <option value="solid">Solid Background</option>
-    <option value="custom">Custom Message</option>
-  </select>
-
-  <input type="text" id="customMessage" placeholder="Enter custom text">
-
-  <button id="saveBtn">Save</button>
+<body class="popup-container">
+  <div class="header">
+    <div class="header-title">Revert Ads To:</div>
+    <div class="header-label">Motivational Quotes</div>
+  </div>
+  <div class="carousel">
+    <div class="slides">
+      <div class="slide" data-value="quotes" data-image="assests/stickman-quotes.jpg" data-label="Motivational Quotes"></div>
+      <div class="slide" data-value="facts" data-image="assests/stickman-facts.gif" data-label="Fun Facts"></div>
+      <div class="slide" data-value="riddles" data-image="assests/riddle.png" data-label="Riddles"></div>
+      <div class="slide" data-value="jokes" data-image="assests/stickman-joke.jpg" data-label="Jokes"></div>
+      <div class="slide" data-value="empty" data-image="assests/empty.jpg" data-label="Empty Space"></div>
+      <div class="slide" data-value="solid" data-image="assests/solid.png" data-label="Solid Background"></div>
+      <div class="slide" data-value="custom" data-image="assests/message.jpg" data-label="Custom Message">
+        <input type="text" id="customMessage" placeholder="Enter custom text">
+      </div>
+      <div class="slide" data-value="memes" data-image="assests/meme.jpg" data-label="Memes"></div>
+    </div>
+    <div class="tooltip">Click to apply</div>
+    <button class="prev" aria-label="Previous Slide">←</button>
+    <button class="next" aria-label="Next Slide">→</button>
+  </div>
   <script src="popup.js"></script>
 </body>
 </html>

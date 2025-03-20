@@ -167,3 +167,8 @@ Troubleshooting
 
 Contributing
 ------------
+
+
+AdMe transforms your browsing experience by replacing annoying ads with delightful content widgets. Swap out advertisements for motivational quotes, fun facts, clever riddles, hilarious jokes, custom messages, or memes—all powered by AI and user-friendly customization. With dynamic content from the Gemini API, meme generation via Imgflip, and a sleek popup interface, AdMe makes every ad space a moment of joy or inspiration. Take control, block the noise, and enjoy the web your way!
+
+Feel free to submit pull requests or issues to enhance AdMe. Ideas for new content types, improved ad detection, or UI enhancements are welcome!

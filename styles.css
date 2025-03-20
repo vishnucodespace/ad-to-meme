@@ -1,4 +1,4 @@
-/* Popup Container */
+/* Popup Container (Unchanged) */
 .popup-container {
   font-family: Arial, sans-serif;
   width: 300px;
@@ -11,7 +11,7 @@
   position: relative;
 }
 
-/* Header */
+/* Header (Unchanged) */
 .header {
   background: #fff;
   padding: 15px 10px;
@@ -49,14 +49,14 @@
   opacity: 0.8;
 }
 
-/* Carousel Section */
+/* Carousel Section (Unchanged) */
 .carousel {
   flex: 1;
   position: relative;
   overflow: hidden;
 }
 
-/* Slides */
+/* Slides (Unchanged) */
 .slides {
   display: flex;
   width: 100%;
@@ -71,14 +71,14 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  background-size: contain; /* Ensure images fit fully within the slide */
+  background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  max-width: 100%; /* Prevent overflow beyond container */
-  max-height: 100%; /* Ensure it fits within the carousel height */
+  max-width: 100%;
+  max-height: 100%;
 }
 
-/* Arrow Buttons */
+/* Arrow Buttons (Unchanged) */
 .prev, .next {
   position: absolute;
   top: 50%;
@@ -100,7 +100,7 @@
   right: 10px;
 }
 
-/* Custom Message Input */
+/* Custom Message Input (Unchanged) */
 #customMessage {
   width: 80%;
   padding: 8px;
@@ -113,7 +113,7 @@
   z-index: 10;
 }
 
-/* Tooltip */
+/* Tooltip (Unchanged) */
 .tooltip {
   position: absolute;
   background: #fff;
@@ -132,68 +132,117 @@
   opacity: 0.95;
 }
 
+/* Stickman-Themed Styles for Replaced Ads (Black and White) */
+
+/* Motivational Quotes Section (Aligned with content.js) */
+.quote-container {
+  font-family: 'Caveat', cursive !important; /* Override inline Arial */
+  max-width: 280px;
+  padding: 20px;
+  background: #fff !important; /* Override #f9f9f9 */
+  border: 3px solid #000 !important; /* Replace blue border-left */
+  border-radius: 0;
+  position: relative;
+  text-align: center;
+  box-shadow: 5px 5px 0 #000; /* Stickman shadow effect */
+}
+
+.quote-title {
+  font-size: 22px !important; /* Larger for stickman emphasis */
+  font-weight: 700;
+  color: #000 !important; /* Override #007BFF */
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  border-bottom: 2px solid #000;
+  padding-bottom: 4px;
+}
+
+.quote-text {
+  font-size: 16px !important; /* Match inline */
+  line-height: 1.4;
+  color: #333 !important; /* Dark gray for contrast */
+  padding: 10px;
+  font-style: italic !important; /* Retain italic */
+  margin: 0 !important; /* Override inline margin */
+}
+
 /* Fun Facts Section */
 .funfact-container {
-  font-family: 'Arial', sans-serif;
-  max-width: 320px;
+  font-family: 'Caveat', cursive;
+  max-width: 280px;
   padding: 20px;
   background: #fff;
-  color: #000;
+  border: 3px solid #000;
+  border-radius: 0;
+  position: relative;
   text-align: center;
-  border: 2px solid #000;
+  box-shadow: 5px 5px 0 #000;
 }
 
 .funfact-header {
-  font-size: 20px;
-  font-weight: bold;
+  font-size: 22px;
+  font-weight: 700;
   color: #000;
   margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  border-bottom: 2px dashed #000;
+  padding-bottom: 4px;
 }
 
 .funfact-text {
   font-size: 16px;
-  font-style: italic;
-  line-height: 1.5;
+  line-height: 1.4;
+  color: #333;
   padding: 10px;
-  background: #fff;
 }
 
 /* Riddles Section */
 .riddle-box {
-  font-family: 'Arial', sans-serif;
-  background: #fff;
+  font-family: 'Caveat', cursive;
+  background: #f5f5f5;
   padding: 20px;
   border: 2px solid #000;
-  text-align: center;
+  border-radius: 0;
   max-width: 280px;
   margin: auto;
+  text-align: center;
+  box-shadow: 4px 4px 0 #000;
 }
 
 .riddle-header {
-  font-size: 18px;
-  font-weight: bold;
+  font-size: 20px;
+  font-weight: 600;
   color: #000;
   margin-bottom: 10px;
+  text-transform: uppercase;
+  border-bottom: 2px solid #000;
 }
 
 .riddle-question {
   font-size: 16px;
-  font-weight: bold;
-  color: #000;
-  margin-bottom: 10px;
+  font-weight: 500;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+  padding: 6px;
 }
 
 .riddle-answer {
   font-size: 14px;
-  color: #000;
-  font-style: italic;
-  margin-top: 10px;
+  color: #555;
+  padding: 5px;
   cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.riddle-answer:hover {
+  transform: translateX(5px);
 }
 
 .riddle-answer span {
   display: none;
-  font-weight: bold;
+  font-weight: 700;
   color: #000;
 }
 
@@ -203,65 +252,71 @@
 
 /* Joke Section */
 .joke-container {
+  font-family: 'Caveat', cursive;
   background: #fff;
-  border: 2px solid #000;
   padding: 15px;
+  border: 3px solid #000;
+  border-radius: 0;
   text-align: center;
-  font-family: "Poppins", sans-serif;
-  color: #000;
-  max-width: 300px;
+  max-width: 280px;
+  box-shadow: 5px 5px 0 #000;
 }
 
 .joke-header {
-  font-size: 18px;
-  font-weight: bold;
+  font-size: 20px;
+  font-weight: 700;
   color: #000;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
   margin-bottom: 8px;
+  border-bottom: 2px dotted #000;
+  padding-bottom: 4px;
 }
 
 .joke-setup {
-  font-size: 17px;
-  font-weight: 600;
-  color: #000;
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
   text-transform: uppercase;
+  padding: 5px;
 }
 
 .joke-punchline {
-  font-size: 16px;
-  font-weight: bold;
-  color: #000;
-  text-transform: lowercase;
-  margin-top: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-top: 6px;
+  padding: 5px;
 }
 
 /* Custom Message Section */
 .custom-message-box {
-  background: #fff;
-  border: 2px solid #000;
+  font-family: 'Caveat', cursive;
+  background: #f0f0f0;
   padding: 18px;
+  border: 2px solid #000;
+  border-radius: 0;
   text-align: center;
-  font-family: "Poppins", sans-serif;
-  color: #000;
-  max-width: 360px;
+  max-width: 280px;
+  box-shadow: 4px 4px 0 #000;
 }
 
 .custom-message-title {
   font-size: 20px;
-  font-weight: bold;
+  font-weight: 700;
   color: #000;
   text-transform: uppercase;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   letter-spacing: 1px;
+  border-bottom: 2px solid #000;
 }
 
 .custom-message-content {
   font-size: 16px;
   font-weight: 400;
-  color: #000;
-  line-height: 1.6;
-  font-style: italic;
+  color: #333;
+  line-height: 1.5;
+  padding: 6px;
 }
 
 /* Solid Placeholder */
@@ -269,42 +324,39 @@
   min-width: 200px;
   min-height: 100px;
   background: #fff;
-  border: 2px solid #000;
+  border: 3px solid #000;
+  border-radius: 0;
+  box-shadow: 5px 5px 0 #000;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.solid-placeholder::before {
-  content: "🚫 Ad Blocked";
-  font-size: 14px;
-  font-weight: bold;
+.solid-placeholder span {
+  font-family: 'Caveat', cursive;
+  font-size: 18px;
+  font-weight: 600;
   color: #000;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
 }
 
 /* Additional Styles */
 .riddle-box,
-.joke-container {
-  max-height: 300px;
-  overflow: auto;
-}
-
-.funfact-container,
 .joke-container,
-.custom-message-box {
+.funfact-container,
+.custom-message-box,
+.solid-placeholder,
+.quote-container {
   margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  max-width: 90%;
-  width: 100%;
+  max-width: 280px;
+  transition: transform 0.2s ease;
 }
 
-.moti {
-  width: 100%;
-  height: 100%;
+.riddle-box:hover,
+.joke-container:hover,
+.funfact-container:hover,
+.custom-message-box:hover,
+.solid-placeholder:hover,
+.quote-container:hover {
+  transform: translateY(-3px); /* Retain hover effect */
 }

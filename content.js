@@ -1,6 +1,6 @@
 // AdMe Content Script
 
-// Define ad selectors
+// Define ad selectors (unchanged)
 const adSelectors = [
   'iframe[class*="ads"]',
   'iframe[src*="ads"]',
@@ -12,7 +12,7 @@ const adSelectors = [
   'img[src*="_ads_"]',
 ];
 
-// Imgflip meme templates (all single-line friendly)
+// Imgflip meme templates (unchanged)
 const memeTemplates = [
   { id: "181913649", name: "Drake Hotline Bling", description: "Drake approving or rejecting, casual tone." },
   { id: "61579", name: "One Does Not Simply", description: "Boromir warning, dramatic tone." },
@@ -41,65 +41,201 @@ const memeTemplates = [
   { id: "89370399", name: "Roll Safe", description: "Guy tapping head, clever trick." }
 ];
 
-// Shuffled template queue
+// Shuffled template queue (unchanged)
 let memeTemplateQueue = [];
 
-// Sets to track used content
+// Sets to track used content (unchanged)
 const usedQuotes = new Set();
 const usedFacts = new Set();
 const usedRiddles = new Set();
 const usedJokes = new Set();
 
-// Utility functions for AI content with no repeats
-async function getAIQuote(attempt = 1) {
-  const maxAttempts = 3;
-  const quote = await fetchAICaption("Generate a deeply inspiring, uplifting quote (max 10 words, positive tone).");
-  if (usedQuotes.has(quote) && attempt < maxAttempts) {
-    console.log("Duplicate quote detected:", quote, "Retrying...");
-    return await getAIQuote(attempt + 1);
-  }
-  usedQuotes.add(quote);
-  return quote;
+// Pools for each content type (unchanged)
+let quotePool = [];
+let factPool = [];
+let riddlePool = [];
+let jokePool = [];
+
+// Fallback content arrays (unchanged)
+const fallbackQuotes = [
+  "The only way to do great work is to love what you do. - Steve Jobs",
+  "Strive not to be a success, but rather to be of value. - Albert Einstein",
+  "You miss 100% of the shots you don't take. - Wayne Gretzky",
+  "Believe you can and you're halfway there. - Theodore Roosevelt",
+  "The best way to predict the future is to create it. - Peter Drucker"
+];
+
+const fallbackFacts = [
+  "Honey never spoils. Archaeologists have found pots of honey in ancient Egyptian tombs that are over 3,000 years old and still edible.",
+  "Octopuses have three hearts. Two pump blood to the gills, while the third pumps it to the rest of the body.",
+  "Bananas are berries, but strawberries aren't. Botanically, berries are fruits produced from a single ovary.",
+  "A group of flamingos is called a 'flamboyance'.",
+  "Wombat poop is cube-shaped."
+];
+
+const fallbackRiddles = [
+  { question: "What has keys but can't open locks?", answer: "A piano" },
+  { question: "What runs but never walks?", answer: "A river" },
+  { question: "What can travel around the world while staying in a corner?", answer: "A stamp" },
+  { question: "What has a head, a tail, is brown, and has no legs?", answer: "A penny" },
+  { question: "What is full of holes but still holds water?", answer: "A sponge" }
+];
+
+const fallbackJokes = [
+  { setup: "Why don't scientists trust atoms?", punchline: "Because they make up everything!" },
+  { setup: "What do you call fake spaghetti?", punchline: "An impasta!" },
+  { setup: "Why did the scarecrow win an award?", punchline: "Because he was outstanding in his field!" },
+  { setup: "How does a penguin build its house?", punchline: "Igloos it together!" },
+  { setup: "Why don't skeletons fight each other?", punchline: "They don't have the guts." }
+];
+
+// Refill promises to handle concurrent access (unchanged)
+let refillQuotePromise = null;
+let refillFactPromise = null;
+let refillRiddlePromise = null;
+let refillJokePromise = null;
+
+// Fetch multiple quotes at once (unchanged)
+async function fetchMultipleQuotes(count) {
+  const prompt = `Generate ${count} deeply inspiring, uplifting quotes, the quotes must not be repeated, best inspiring quote (each max 15 words, positive tone). Separate them with '|'`;
+  const response = await fetchAICaption(prompt);
+  const quotes = response.split('|').map(q => q.trim()).filter(q => q && !usedQuotes.has(q));
+  quotes.forEach(q => usedQuotes.add(q));
+  return quotes;
 }
 
-async function getAIFact(attempt = 1) {
-  const maxAttempts = 3;
-  const fact = await fetchAICaption("Generate a mind-blowing, fascinating fun fact (max 15 words, wow factor).");
-  if (usedFacts.has(fact) && attempt < maxAttempts) {
-    console.log("Duplicate fact detected:", fact, "Retrying...");
-    return await getAIFact(attempt + 1);
+// Refill quote pool (unchanged)
+async function refillQuotePool() {
+  if (!refillQuotePromise) {
+    refillQuotePromise = fetchMultipleQuotes(5).then(newQuotes => {
+      quotePool.push(...newQuotes);
+      refillQuotePromise = null;
+    });
   }
-  usedFacts.add(fact);
-  return fact;
+  await refillQuotePromise;
 }
 
-async function getAIRiddle(attempt = 1) {
-  const maxAttempts = 3;
-  const riddleText = await fetchAICaption("Generate a clever, concise riddle with a clear one-word answer.");
-  const parts = riddleText.split("Answer: ");
-  const riddle = { question: parts[0].trim(), answer: parts[1]?.trim() || "Unknown" };
-  if (usedRiddles.has(riddle.question) && attempt < maxAttempts) {
-    console.log("Duplicate riddle detected:", riddle.question, "Retrying...");
-    return await getAIRiddle(attempt + 1);
+// Get unique quote from pool with fallback (unchanged)
+async function getAIQuote() {
+  if (quotePool.length === 0) {
+    await refillQuotePool();
   }
-  usedRiddles.add(riddle.question);
-  return riddle;
+  if (quotePool.length === 0) {
+    const randomIndex = Math.floor(Math.random() * fallbackQuotes.length);
+    return fallbackQuotes[randomIndex];
+  }
+  return quotePool.shift();
 }
 
-async function getAIJoke(attempt = 1) {
-  const maxAttempts = 3;
-  const jokeText = await fetchAICaption("Generate a sharp, hilarious joke with setup and punchline (max 15 words).");
-  const parts = jokeText.split(" - ");
-  const joke = { setup: parts[0].trim(), punchline: parts[1]?.trim() || "Oops, no punchline!" };
-  if (usedJokes.has(joke.setup) && attempt < maxAttempts) {
-    console.log("Duplicate joke detected:", joke.setup, "Retrying...");
-    return await getAIJoke(attempt + 1);
-  }
-  usedJokes.add(joke.setup);
-  return joke;
+// Fetch multiple facts at once (unchanged)
+async function fetchMultipleFacts(count) {
+  const prompt = `Generate ${count} mind-blowing, fascinating fun facts, make them all unique (each max 15 words, wow factor). Separate them with '|'`;
+  const response = await fetchAICaption(prompt);
+  const facts = response.split('|').map(f => f.trim()).filter(f => f && !usedFacts.has(f));
+  facts.forEach(f => usedFacts.add(f));
+  return facts;
 }
 
-// Generic AI caption fetcher
+// Refill fact pool (unchanged)
+async function refillFactPool() {
+  if (!refillFactPromise) {
+    refillFactPromise = fetchMultipleFacts(5).then(newFacts => {
+      factPool.push(...newFacts);
+      refillFactPromise = null;
+    });
+  }
+  await refillFactPromise;
+}
+
+// Get unique fact from pool with fallback (unchanged)
+async function getAIFact() {
+  if (factPool.length === 0) {
+    await refillFactPool();
+  }
+  if (factPool.length === 0) {
+    const randomIndex = Math.floor(Math.random() * fallbackFacts.length);
+    return fallbackFacts[randomIndex];
+  }
+  return factPool.shift();
+}
+
+// Fetch multiple riddles at once (unchanged)
+async function fetchMultipleRiddles(count) {
+  const prompt = `Generate ${count} clever, concise riddles, all must be unique, each with a clear one-word answer. Format each as "Riddle: [question] Answer: [answer]" separated by '||'`;
+  const response = await fetchAICaption(prompt);
+  const riddleTexts = response.split('||').map(rt => rt.trim());
+  const riddles = riddleTexts.map(rt => {
+    const parts = rt.split("Answer: ");
+    const question = parts[0].replace("Riddle: ", "").trim();
+    const answer = parts[1]?.trim() || "Unknown";
+    return { question, answer };
+  }).filter(r => r.question && r.answer && !usedRiddles.has(`${r.question}|${r.answer}`));
+  riddles.forEach(r => usedRiddles.add(`${r.question}|${r.answer}`));
+  return riddles;
+}
+
+// Refill riddle pool (unchanged)
+async function refillRiddlePool() {
+  if (!refillRiddlePromise) {
+    refillRiddlePromise = fetchMultipleRiddles(3).then(newRiddles => {
+      riddlePool.push(...newRiddles);
+      refillRiddlePromise = null;
+    });
+  }
+  await refillRiddlePromise;
+}
+
+// Get unique riddle from pool with fallback (unchanged)
+async function getAIRiddle() {
+  if (riddlePool.length === 0) {
+    await refillRiddlePool();
+  }
+  if (riddlePool.length === 0) {
+    const randomIndex = Math.floor(Math.random() * fallbackRiddles.length);
+    return fallbackRiddles[randomIndex];
+  }
+  return riddlePool.shift();
+}
+
+// Fetch multiple jokes at once (unchanged)
+async function fetchMultipleJokes(count) {
+  const prompt = `Generate ${count} sharp, all must be unique, hilarious jokes with setup and punchline (each max 15 words). Format each as "Setup: [setup] Punchline: [punchline]" separated by '||'`;
+  const response = await fetchAICaption(prompt);
+  const jokeTexts = response.split('||').map(jt => jt.trim());
+  const jokes = jokeTexts.map(jt => {
+    const parts = jt.split("Punchline: ");
+    const setup = parts[0].replace("Setup: ", "").trim();
+    const punchline = parts[1]?.trim() || "Oops, no punchline!";
+    return { setup, punchline };
+  }).filter(j => j.setup && j.punchline && !usedJokes.has(`${j.setup}|${j.punchline}`));
+  jokes.forEach(j => usedJokes.add(`${j.setup}|${j.punchline}`));
+  return jokes;
+}
+
+// Refill joke pool (unchanged)
+async function refillJokePool() {
+  if (!refillJokePromise) {
+    refillJokePromise = fetchMultipleJokes(3).then(newJokes => {
+      jokePool.push(...newJokes);
+      refillJokePromise = null;
+    });
+  }
+  await refillJokePromise;
+}
+
+// Get unique joke from pool with fallback (unchanged)
+async function getAIJoke() {
+  if (jokePool.length === 0) {
+    await refillJokePool();
+  }
+  if (jokePool.length === 0) {
+    const randomIndex = Math.floor(Math.random() * fallbackJokes.length);
+    return fallbackJokes[randomIndex];
+  }
+  return jokePool.shift();
+}
+
+// Generic AI caption fetcher (unchanged)
 async function fetchAICaption(prompt) {
   const apiKey = window.adMeConfig?.geminiApiKey || "MISSING_API_KEY";
   const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
@@ -125,7 +261,7 @@ async function fetchAICaption(prompt) {
   }
 }
 
-// Shuffle array function
+// Shuffle array function (unchanged)
 function shuffleArray(array) {
   const shuffled = [...array];
   for (let i = shuffled.length - 1; i > 0; i--) {
@@ -135,7 +271,7 @@ function shuffleArray(array) {
   return shuffled;
 }
 
-// Initialize or reset template queue
+// Initialize or reset template queue (unchanged)
 function initializeTemplateQueue(templateList, queue) {
   if (queue.length === 0) {
     queue.push(...shuffleArray(templateList));
@@ -143,7 +279,7 @@ function initializeTemplateQueue(templateList, queue) {
   }
 }
 
-// Fetch caption from Gemini API for memes (reverted to original humor)
+// Fetch caption from Gemini API for memes (unchanged)
 async function fetchGeminiCaption(template, attempt = 1) {
   const apiKey = window.adMeConfig?.geminiApiKey || "MISSING_API_KEY";
   const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
@@ -183,7 +319,7 @@ async function fetchGeminiCaption(template, attempt = 1) {
   }
 }
 
-// Fetch unique meme using Gemini caption and Imgflip
+// Fetch unique meme using Gemini caption and Imgflip (unchanged from original)
 async function fetchUniqueMeme(templateList, queue) {
   const username = window.adMeConfig?.imgflipUsername || "MISSING_USERNAME";
   const password = window.adMeConfig?.imgflipPassword || "MISSING_PASSWORD";
@@ -233,7 +369,7 @@ async function fetchUniqueMeme(templateList, queue) {
   }
 }
 
-// Replace ad element based on selected option
+// Replace ad element based on selected option (updated to use styles.css with meme debugging)
 function replaceAd(element) {
   if (element.dataset.admeReplaced) {
     console.log("Skipping:", element);
@@ -252,16 +388,16 @@ function replaceAd(element) {
       case "quotes":
         const quote = await getAIQuote();
         replacementContent = `
-          <div class="quote-container" style="font-family: Arial, sans-serif; padding: 10px; text-align: center; background-color: #f9f9f9; border-left: 5px solid #007BFF;">
-            <div class="quote-title" style="font-size: 14px; font-weight: bold; color: #007BFF;">QUOTE OF THE DAY</div>
-            <p class="quote-text" style="font-size: 16px; font-style: italic; margin: 10px 0;">“${quote}”</p>
+          <div class="quote-container">
+            <div class="quote-title">QUOTE OF THE DAY</div>
+            <p class="quote-text">“${quote}”</p>
           </div>`;
         break;
       case "facts":
         const fact = await getAIFact();
         replacementContent = `
           <div class="funfact-container">
-            <div class="funfact-header">🤔 DID YOU KNOW?</div> 
+            <div class="funfact-header">DID YOU KNOW?</div>
             <p class="funfact-text">${fact}</p>
           </div>`;
         break;
@@ -269,7 +405,7 @@ function replaceAd(element) {
         const riddle = await getAIRiddle();
         replacementContent = `
           <div class="riddle-box">
-            <div class="riddle-header">🤔 CAN YOU SOLVE THIS?</div>
+            <div class="riddle-header">CAN YOU SOLVE THIS?</div>
             <p class="riddle-question">${riddle.question}</p>
             <p class="riddle-answer">Show answer <span>${riddle.answer}</span></p>
           </div>`;
@@ -278,7 +414,7 @@ function replaceAd(element) {
         const joke = await getAIJoke();
         replacementContent = `
           <div class="joke-container">
-            <div class="joke-header">😂 LAUGH BREAK 😂</div>
+            <div class="joke-header">LAUGH BREAK</div>
             <p class="joke-setup">${joke.setup}</p>
             <p class="joke-punchline">${joke.punchline}</p>
           </div>`;
@@ -287,27 +423,31 @@ function replaceAd(element) {
         replacementContent = "";
         break;
       case "solid":
-        replacementContent = `<div class="solid-placeholder"></div>`;
+        replacementContent = `<div class="solid-placeholder"><span>AD BLOCKED</span></div>`;
         break;
       case "custom":
         replacementContent = `
           <div class="custom-message-box">
-            <div class="custom-message-title">🌟🌟🌟</div>
+            <div class="custom-message-title">CUSTOM MESSAGE</div>
             <p class="custom-message-content">${data.customMessage || "Your personalized content goes here!"}</p>
           </div>`;
         break;
       case "memes":
+        console.log("Attempting to fetch meme...");
         const meme = await fetchUniqueMeme(memeTemplates, memeTemplateQueue);
+        console.log("Meme object:", meme);
         replacementContent = `<img src="${meme.imageUrl}" alt="Funny Meme" class="meme-image">`;
+        console.log("Meme HTML set:", replacementContent);
         break;
       default:
-        replacementContent = `<p style="font-size: 16px; line-height: 1.5; font-weight: 500; color: #111827; background-color: #F9FAFB;">Ad Blocked</p>`;
+        replacementContent = `<div class="solid-placeholder"><span>AD BLOCKED</span></div>`;
     }
     element.innerHTML = replacementContent;
+    console.log("Replacement content applied:", element.innerHTML);
   });
 }
 
-// Detect ads
+// Detect ads (unchanged)
 function detectAds() {
   console.log("Detecting Ads...");
   adSelectors.forEach(selector => {
@@ -324,7 +464,7 @@ function detectAds() {
   });
 }
 
-// Mutation observer
+// Mutation observer (unchanged)
 function setupMutationObserver() {
   let timeout;
   const observer = new MutationObserver(() => {
@@ -334,7 +474,7 @@ function setupMutationObserver() {
   observer.observe(document.body, { childList: true, subtree: true });
 }
 
-// Initialize
+// Initialize (unchanged)
 console.log("AdMe content script loaded");
 detectAds();
 setupMutationObserver();

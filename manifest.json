@@ -19,5 +19,8 @@
       "css": ["styles.css"],
       "run_at": "document_end"
     }
-  ]
+  ],
+  "icons": {
+    "128": "assests/icon128.png"
+  }
 }

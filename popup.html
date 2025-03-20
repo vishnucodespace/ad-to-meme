@@ -1,24 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AdMe Settings</title>
   <link rel="stylesheet" href="styles.css">
 </head>
-<body class="popup-container"></body>
-  <h3>Replace Ads With:</h3>
-  <select id="replacementType">
-    <option value="quotes">Motivational Quotes</option>
-    <option value="facts">Fun Facts</option>
-    <option value="riddles">Riddles</option>
-    <option value="jokes">Jokes</option>
-    <option value="empty">Empty Space</option>
-    <option value="solid">Solid Background</option>
-    <option value="custom">Custom Message</option>
-  </select>
-
-  <input type="text" id="customMessage" placeholder="Enter custom text">
-
-  <button id="saveBtn">Save</button>
+<body>
+  <div class="popup-container">
+    <h3>AdMe Settings</h3>
+    <label for="replacementType">Replace Ads With:</label>
+    <select id="replacementType">
+      <option value="default">Default (Ad Blocked)</option>
+      <option value="quotes">Quotes</option>
+      <option value="facts">Fun Facts</option>
+      <option value="riddles">Riddles</option>
+      <option value="jokes">Jokes</option>
+      <option value="memes">Memes</option>
+      <option value="empty">Empty Space</option>
+      <option value="solid">Solid Color</option>
+      <option value="custom">Custom Message</option>
+    </select>
+    <div id="customMessageSection" style="display: none;">
+      <label for="customMessage">Custom Message:</label>
+      <input type="text" id="customMessage" placeholder="Enter your message">
+      <button id="saveCustomMessage">Save</button>
+    </div>
+  </div>
   <script src="popup.js"></script>
 </body>
 </html>

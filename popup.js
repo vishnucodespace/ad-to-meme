@@ -1,33 +1,37 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const replacementType = document.getElementById("replacementType");
+  const replacementTypeSelect = document.getElementById("replacementType");
+  const customMessageSection = document.getElementById("customMessageSection");
   const customMessageInput = document.getElementById("customMessage");
-  const saveBtn = document.getElementById("saveBtn");
+  const saveCustomMessageButton = document.getElementById("saveCustomMessage");
 
   // Load saved settings
   chrome.storage.sync.get(["replacementType", "customMessage"], (data) => {
-    if (data.replacementType) {
-      replacementType.value = data.replacementType;
-      if (data.replacementType === "custom") {
-        customMessageInput.style.display = "block";
-        customMessageInput.value = data.customMessage || "";
-      }
-    }
+    replacementTypeSelect.value = data.replacementType || "default";
+    customMessageInput.value = data.customMessage || "";
+    toggleCustomMessageSection(replacementTypeSelect.value);
   });
 
-  // Show/hide custom message input
-  replacementType.addEventListener("change", () => {
-    customMessageInput.style.display = (replacementType.value === "custom") ? "block" : "none";
+  // Handle dropdown change and close popup
+  replacementTypeSelect.addEventListener("change", () => {
+    const selectedValue = replacementTypeSelect.value;
+    chrome.storage.sync.set({ replacementType: selectedValue }, () => {
+      console.log("Replacement type saved:", selectedValue);
+      window.close(); // Close the popup
+    });
+    toggleCustomMessageSection(selectedValue);
   });
 
-  // Save settings
-  saveBtn.addEventListener("click", () => {
-    const selectedType = replacementType.value;
-    const customMessage = customMessageInput.value.trim();
-
-    chrome.storage.sync.set({ replacementType: selectedType, customMessage }, () => {
-      console.log("Settings saved.");
-      window.close();
+  // Handle custom message save and close popup
+  saveCustomMessageButton.addEventListener("click", () => {
+    const message = customMessageInput.value;
+    chrome.storage.sync.set({ customMessage: message }, () => {
+      console.log("Custom message saved:", message);
+      window.close(); // Close the popup
     });
   });
-});
 
+  // Show/hide custom message section
+  function toggleCustomMessageSection(value) {
+    customMessageSection.style.display = value === "custom" ? "block" : "none";
+  }
+});
